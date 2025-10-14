@@ -39,14 +39,14 @@ export default function Dashboard() {
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       {/* Header */}
-      <div className="bg-red-100 rounded-xl shadow-sm border p-6">
+      <div className="bg-black rounded-xl shadow-sm border p-6">
         <div className="flex justify-between items-start">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Garment Sampling Dashboard</h1>
-            <p className="text-gray-600 mt-2">Sample Request & Development Tracking System</p>
+            <h1 className="text-3xl font-bold text-white">Garment Sampling Dashboard</h1>
+            <p className="text-gray-300 mt-2">Sample Request & Development Tracking System</p>
           </div>
           <div className="text-right">
-            <p className="text-sm text-gray-500">Active Samples</p>
+            <p className="text-sm text-gray-300">Active Samples</p>
             <p className="text-2xl font-bold text-blue-600">{stats.totalSamples}</p>
           </div>
         </div>
@@ -54,29 +54,29 @@ export default function Dashboard() {
 
       {/* KPI Overview */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-        <div className="bg-red-100 p-4 rounded-lg shadow-sm border">
-          <h3 className="text-sm font-medium text-gray-500">Total Samples</h3>
-          <p className="text-2xl font-bold text-blue-600 mt-1">{stats.totalSamples}</p>
+        <div className="bg-black p-4 rounded-lg shadow-sm border">
+          <h3 className="text-sm font-medium text-gray-300">Total Samples</h3>
+          <p className="text-2xl font-bold text-white mt-1">{stats.totalSamples}</p>
         </div>
-        <div className="bg-red-100 p-4 rounded-lg shadow-sm border">
-          <h3 className="text-sm font-medium text-gray-500">High Priority</h3>
+        <div className="bg-black p-4 rounded-lg shadow-sm border">
+          <h3 className="text-sm font-medium text-gray-300">High Priority</h3>
           <p className="text-2xl font-bold text-red-600 mt-1">{stats.highPriority}</p>
         </div>
-        <div className="bg-red-100 p-4 rounded-lg shadow-sm border">
-          <h3 className="text-sm font-medium text-gray-500">Delayed</h3>
+        <div className="bg-black p-4 rounded-lg shadow-sm border">
+          <h3 className="text-sm font-medium text-gray-300">Delayed</h3>
           <p className="text-2xl font-bold text-yellow-600 mt-1">{stats.delayedSamples}</p>
         </div>
-        <div className="bg-red-100 p-4 rounded-lg shadow-sm border">
-          <h3 className="text-sm font-medium text-gray-500">Total QTY</h3>
+        <div className="bg-black p-4 rounded-lg shadow-sm border">
+          <h3 className="text-sm font-medium text-gray-300">Total QTY</h3>
           <p className="text-2xl font-bold text-green-600 mt-1">{stats.totalQty}</p>
         </div>
-        <div className="bg-red-100 p-4 rounded-lg shadow-sm border">
-          <h3 className="text-sm font-medium text-gray-500">On Time</h3>
+        <div className="bg-black p-4 rounded-lg shadow-sm border">
+          <h3 className="text-sm font-medium text-gray-300">On Time</h3>
           <p className="text-2xl font-bold text-purple-600 mt-1">{stats.onTimePercentage}%</p>
         </div>
-        <div className="bg-red-100 p-4 rounded-lg shadow-sm border">
-          <h3 className="text-sm font-medium text-gray-500">Approved</h3>
-          <p className="text-2xl font-bold text-indigo-600 mt-1">{stats.inquiryStatusCounts.approved}</p>
+        <div className="bg-black p-4 rounded-lg shadow-sm border">
+          <h3 className="text-sm font-medium text-gray-300">Approved</h3>
+          <p className="text-2xl font-bold text-white mt-1">{stats.inquiryStatusCounts.approved}</p>
         </div>
       </div>
 
@@ -84,8 +84,8 @@ export default function Dashboard() {
         {/* Left Sidebar - Filters & Charts */}
         <div className="xl:col-span-1 space-y-6">
           {/* Quick Filters */}
-          <div className="bg-red-100 rounded-xl shadow-sm border p-6">
-            <h3 className="text-lg font-semibold mb-4">Quick Filters</h3>
+          <div className="bg-black rounded-xl shadow-sm border p-6">
+            <h3 className="text-lg font-semibold mb-4 text-white">Quick Filters</h3>
             
             {/* Priority Filter */}
             <div className="mb-4">
