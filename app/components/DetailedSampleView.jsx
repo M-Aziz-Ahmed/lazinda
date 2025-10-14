@@ -14,9 +14,9 @@ export default function DetailedSampleView({ sample, onClose }) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-red-100 rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="sticky top-0 bg-red-100 border-b p-6">
+        <div className="sticky top-0 bg-white border-b p-6">
           <div className="flex justify-between items-start">
             <div>
               <h2 className="text-2xl font-bold text-gray-900">{sample.id} - Detailed View</h2>
@@ -105,11 +105,11 @@ export default function DetailedSampleView({ sample, onClose }) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div>
                 <p className="text-gray-500 mb-1">Fabric Composition</p>
-                <p className="font-medium bg-red-100 p-3 rounded-lg border">{sample.fabric}</p>
+                <p className="font-medium bg-white p-3 rounded-lg border">{sample.fabric}</p>
               </div>
               <div>
                 <p className="text-gray-500 mb-1">Color / Wash</p>
-                <p className="font-medium bg-red-100 p-3 rounded-lg border">{sample.colorWash}</p>
+                <p className="font-medium bg-white p-3 rounded-lg border">{sample.colorWash}</p>
               </div>
             </div>
           </div>
@@ -117,7 +117,7 @@ export default function DetailedSampleView({ sample, onClose }) {
           {/* Description */}
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="font-semibold text-gray-700 mb-3">Description</h3>
-            <p className="text-sm text-gray-800 bg-red-100 p-4 rounded-lg border">{sample.description}</p>
+            <p className="text-sm text-gray-800 bg-white p-4 rounded-lg border">{sample.description}</p>
           </div>
 
           {/* Assignment & Tracking */}

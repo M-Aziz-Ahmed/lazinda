@@ -10,8 +10,8 @@ export default function StatusOverview({ data }) {
   const total = data.length;
 
   return (
-    <div className="bg-red-100 rounded-xl shadow-sm border p-6">
-      <h3 className="text-lg font-semibold mb-4">Production Status</h3>
+    <div className="bg-black rounded-xl shadow-sm border p-6">
+      <h3 className="text-lg text-white font-semibold mb-4">Production Status</h3>
       <div className="space-y-3">
         {Object.entries(statusCounts).map(([status, count]) => (
           <div key={status} className="flex items-center justify-between bg-white p-3 rounded-lg border border-gray-200">

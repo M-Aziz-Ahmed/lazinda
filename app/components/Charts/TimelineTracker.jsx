@@ -5,8 +5,8 @@ export default function TimelineTracker({ data }) {
     .slice(0, 5);
 
   return (
-    <div className="bg-red-100 rounded-xl shadow-sm border p-6">
-      <h3 className="text-lg font-semibold mb-4">Upcoming Deliveries</h3>
+    <div className="bg-black rounded-xl shadow-sm border p-6">
+      <h3 className="text-lg font-semibold mb-4 text-white">Upcoming Deliveries</h3>
       <div className="space-y-4">
         {upcomingSamples.map(sample => {
           const isDelayed = sample.shipmentDelay !== 'No Delay';
