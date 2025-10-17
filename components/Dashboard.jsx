@@ -1,13 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { sampleData, getSamplingStats, sampleTypes, priorities, statuses, inquiryStatuses, styles } from '../../lib/data';
-import SampleCard from './SampleCard';
-import DetailedSampleView from './DetailedSampleView';
+import { sampleData, getSamplingStats, sampleTypes, priorities, statuses, inquiryStatuses, styles } from '../lib/data';
+import DetailedReportView from './DetailedReportView';
 import StatusOverview from './Charts/StatusOverview';
 import PriorityDistribution from './Charts/PriorityDistribution';
 import TimelineTracker from './Charts/TimelineTracker';
-import SampleProgressBar from './SampleProgressBar';
+import SampleCard from './SampleCard';
 
 export default function Dashboard() {
   const [samples, setSamples] = useState(sampleData);
@@ -42,7 +41,7 @@ export default function Dashboard() {
       <div className="bg-black rounded-xl shadow-sm border p-6">
         <div className="flex justify-between items-start">
           <div>
-            <h1 className="text-3xl font-bold text-white">Garment Sampling Dashboard</h1>
+            <h1 className="text-3xl font-bold text-white">Garment Sampling </h1>
             <p className="text-gray-300 mt-2">Sample Request & Development Tracking System</p>
           </div>
           <div className="text-right">

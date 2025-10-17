@@ -1,6 +1,6 @@
 'use client';   
 import React from 'react';
-import { statuses } from '../../lib/data';
+import { statuses } from '../lib/data';
 
 export default function SampleProgressBar({ status }) {
   return (
