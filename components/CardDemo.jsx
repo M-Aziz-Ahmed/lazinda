@@ -1,3 +1,4 @@
+'use client'
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -10,8 +11,17 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useState } from "react"
 
 export function CardDemo() {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    console.log(username, password);
+    const handleLogin = (e) => {
+        e.preventDefault();
+        const credentials = { username, password };
+
+    }
   return (
     <Card className="w-full bg-white shadow-sm">
       <CardHeader className="px-6 pt-6">
@@ -31,6 +41,8 @@ export function CardDemo() {
                 placeholder="m@example.com"
                 required
                 className="w-full"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </div>
             <div className="grid gap-2">
@@ -43,7 +55,14 @@ export function CardDemo() {
                   Forgot your password?
                 </a>
               </div>
-              <Input id="password" type="password" required className="w-full" />
+              <Input 
+              id="password"
+              type="password" 
+              required 
+              value={password}
+              className="w-full"
+              onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
           </div>
         </form>

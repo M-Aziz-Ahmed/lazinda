@@ -1,6 +1,6 @@
 import { Inter } from 'next/font/google';
 import './globals.css';
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { SidebarProvider } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 
 const inter = Inter({ subsets: ['latin'] });
@@ -16,7 +16,6 @@ export default function RootLayout({ children }) {
       <body className={`${inter.className} bg-gray-50 min-h-screen text-slate-900`}>
         <SidebarProvider>
             <AppSidebar />
-                  <SidebarTrigger />
                   {children}
         </SidebarProvider>
       </body>
