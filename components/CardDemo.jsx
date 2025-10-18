@@ -93,9 +93,6 @@ export function CardDemo() {
           <Button type="submit" className="w-full py-2">
             Login
           </Button>
-          <Button variant="outline" className="w-full py-2">
-            Login with Google
-          </Button>
         </CardFooter>
       </form>
     </Card>
