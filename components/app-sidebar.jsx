@@ -1,6 +1,6 @@
 "use client"
 import * as React from "react"
-import { Calendar, Home, Inbox, Search, Settings, ClipboardCheck } from "lucide-react"
+import { Calendar, Home, Inbox, Search, Settings, ClipboardList } from "lucide-react"
 import { useIsMobile } from "@/hooks/use-mobile"
 
 import {
@@ -29,7 +29,7 @@ const items = [
   {
     title: "Reports",
     url: "/reports",
-    icon: ClipboardCheck,
+    icon: ClipboardList,
   },
   {
     title: "Calendar",
