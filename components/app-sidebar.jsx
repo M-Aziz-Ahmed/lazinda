@@ -72,14 +72,14 @@ export function AppSidebar() {
       )}
 
       {/* Make the sidebar collapsible into an icon rail on desktop */}
-      <Sidebar collapsible={"icon"}>
+      <Sidebar collapsible={"icon"} variant="floating">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Navigation Links</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem className={"mb-1 h-10"} key={item.title}>
                   <SidebarMenuButton asChild>
                     <a href={item.url}>
                       <item.icon />
