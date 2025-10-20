@@ -36,11 +36,22 @@ const buttonVariants = cva(
   }
 )
 
+function Spinner({ className = "w-4 h-4 animate-spin" }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className}>
+      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" opacity="0.2" />
+      <path d="M22 12a10 10 0 00-10-10" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+    </svg>
+  )
+}
+
 function Button({
   className,
   variant,
   size,
   asChild = false,
+  loading = false,
+  children,
   ...props
 }) {
   const Comp = asChild ? Slot : "button"
@@ -49,7 +60,16 @@ function Button({
     <Comp
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
-      {...props} />
+      disabled={loading || props.disabled}
+      {...props}>
+      {loading ? (
+        <span className="flex items-center justify-center">
+          <Spinner className="w-4 h-4 mr-2" />
+          <span className="sr-only">Loading</span>
+        </span>
+      ) : null}
+      {children}
+    </Comp>
   );
 }
 

@@ -12,17 +12,23 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import OtpInput from "@/components/ui/otp-input";
 import { Label } from "@/components/ui/label";
 
 export function CardDemo() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [verifying, setVerifying] = useState(false);
   const router = useRouter();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
       const res = await fetch("/api/auth/login", {
@@ -33,14 +39,45 @@ export function CardDemo() {
         body: JSON.stringify({ email, password }),
       });
 
+      const data = await res.json();
       if (res.ok) {
-        router.push("/");
+        // OTP sent
+        setOtpSent(true);
+        // If previewUrl returned (ethereal), show it in console for dev
+        if (data.previewUrl) console.info('OTP preview:', data.previewUrl);
+        setLoading(false);
       } else {
         const data = await res.json();
         setError(data.error || "An error occurred.");
+        setLoading(false);
       }
     } catch (error) {
       setError("An error occurred. Please try again.");
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async (e) => {
+    e.preventDefault();
+    setError("");
+    setVerifying(true);
+    try {
+      const res = await fetch('/api/auth/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, otp }),
+      });
+      if (res.ok) {
+        router.push('/');
+        setVerifying(false);
+      } else {
+        const data = await res.json();
+        setError(data.error || 'OTP verification failed');
+        setVerifying(false);
+      }
+    } catch (err) {
+      setError('OTP verification failed');
+      setVerifying(false);
     }
   };
 
@@ -52,7 +89,7 @@ export function CardDemo() {
           Enter your email below to login to your account
         </CardDescription>
       </CardHeader>
-      <form onSubmit={handleLogin}>
+      <form onSubmit={otpSent ? handleVerifyOtp : handleLogin}>
         <CardContent className="px-6 py-4">
           <div className="flex flex-col gap-4">
             <div className="grid gap-2">
@@ -67,31 +104,40 @@ export function CardDemo() {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Password</Label>
-                <a
-                  href="#"
-                  className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                >
-                  Forgot your password?
-                </a>
+            {!otpSent && (
+              <div className="grid gap-2">
+                <div className="flex items-center">
+                  <Label htmlFor="password">Password</Label>
+                  <a
+                    href="#"
+                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                  >
+                    Forgot your password?
+                  </a>
+                </div>
+                <Input
+                  id="password"
+                  type="password"
+                  required
+                  className="w-full"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </div>
-              <Input
-                id="password"
-                type="password"
-                required
-                className="w-full"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
+            )}
+
+            {otpSent && (
+              <div className="grid gap-2">
+                <Label htmlFor="otp">Enter OTP</Label>
+                <OtpInput length={6} value={otp} onChange={setOtp} inputClass="w-12 h-12 text-center rounded-md border" />
+              </div>
+            )}
             {error && <p className="text-red-500 text-sm">{error}</p>}
           </div>
         </CardContent>
         <CardFooter className="flex-col gap-3 px-6 pb-6">
-          <Button type="submit" className="w-full py-2">
-            Login
+          <Button type="submit" className="w-full py-2" loading={otpSent ? verifying : loading}>
+            {otpSent ? (verifying ? 'Verifying...' : 'Verify OTP') : (loading ? 'Sending...' : 'Login')}
           </Button>
         </CardFooter>
       </form>

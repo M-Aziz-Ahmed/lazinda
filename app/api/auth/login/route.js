@@ -3,6 +3,8 @@ import dbConnect from '@/lib/connectDb';
 import User from '@/lib/models/User';
 import jwt from 'jsonwebtoken';
 import { serialize } from 'cookie';
+import crypto from 'crypto';
+import { sendOtpEmail } from '@/lib/mail';
 
 const JWT_SECRET = process.env.JWT_SECRET
 
@@ -31,27 +33,23 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
-    if (!JWT_SECRET) {
-      console.error('JWT_SECRET is not defined in environment')
-      return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
+    // Generate a short numeric OTP and store it on the user with expiry
+    const otp = Math.floor(100000 + Math.random() * 900000).toString(); // 6 digits
+    const expires = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
+
+    user.otpCode = otp;
+    user.otpExpires = expires;
+    await user.save();
+
+    // send OTP by email
+    try {
+      const previewUrl = await sendOtpEmail(user.email, otp);
+      // return previewUrl in dev to help testing
+      return NextResponse.json({ message: 'OTP sent', previewUrl });
+    } catch (err) {
+      console.error('Error sending OTP', err);
+      return NextResponse.json({ error: 'Failed to send OTP' }, { status: 500 });
     }
-
-    const token = jwt.sign({ userId: user._id, role: user.role }, JWT_SECRET, {
-      expiresIn: '1h',
-    });
-
-    const serializedCookie = serialize('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 60 * 60, // 1 hour
-      path: '/',
-    });
-
-    const response = NextResponse.json({ message: 'Login successful' });
-    response.headers.set('Set-Cookie', serializedCookie);
-
-    return response;
   } catch (error) {
     return NextResponse.json({ error: 'Error logging in' }, { status: 500 });
   }

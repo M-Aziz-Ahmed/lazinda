@@ -1,10 +1,19 @@
 'use client';
-
+import { getCookieClient } from '@/lib/cookieUtils';
 export default function Home() {
+
+// inside a client component
+const role = getCookieClient('role');
+
+  // ...
   return (
     <>
-      <h1>Welcome to the Home Page!</h1>
-      <p>You are logged in.</p>
+    {role === 'admin' ? (
+      <h1>Welcome, Admin!</h1>
+    ) : (
+      <h1>Welcome, User!</h1>
+    )}
+
     </>
   );
 }
