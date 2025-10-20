@@ -35,7 +35,7 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
     }
 
-    const token = jwt.sign({ userId: user._id, role: user.role }, JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user._id, role: user.role, name:user.name }, JWT_SECRET, { expiresIn: '1h' });
 
     // clear OTP fields
     user.otpCode = null;
@@ -54,13 +54,19 @@ export async function POST(request) {
       httpOnly: false,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 60 * 60,
+      path: '/',
+    });
+    const serializedNameCookie = serialize('name', String(user.name || ''), {
+      httpOnly: false,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
       path: '/',
     });
 
     const response = NextResponse.json({ message: 'Authenticated' });
     response.headers.append('Set-Cookie', serializedCookie);
     response.headers.append('Set-Cookie', serializedRoleCookie);
+    response.headers.append('Set-Cookie', serializedNameCookie);
     return response;
   } catch (err) {
     console.error(err);

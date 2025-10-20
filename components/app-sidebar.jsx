@@ -1,7 +1,9 @@
 "use client"
 import * as React from "react"
-import { Calendar, Home, Inbox, Search, Settings, ClipboardList, User } from "lucide-react"
+import { Calendar, Home, Inbox, Search, Settings, ClipboardList, User, RollerCoaster } from "lucide-react"
 import { useIsMobile } from "@/hooks/use-mobile"
+import { getCookieClient } from '@/lib/cookieUtils';
+
 
 import {
   Sidebar,
@@ -47,6 +49,7 @@ const items = [
 ]
  
 export function AppSidebar() {
+  const name = getCookieClient('name');
   const isMobile = useIsMobile()
 
   return (
@@ -124,7 +127,7 @@ export function AppSidebar() {
                   <SidebarMenuButton asChild>
                     <a href="/profile" className="flex items-center">
                       <User className="bg-slate-100" />
-                      <span className="border-l-2 border-slate-300 px-3 text-gray-600">Aziz Ahmed</span>
+                      <span className="border-l-2 border-slate-300 px-3 text-gray-600">{name}</span>
 
                     </a>
                   </SidebarMenuButton>
