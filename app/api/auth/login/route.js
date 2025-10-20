@@ -4,15 +4,22 @@ import User from '@/lib/models/User';
 import jwt from 'jsonwebtoken';
 import { serialize } from 'cookie';
 
-const JWT_SECRET = process.env.JWT_SECRET 
+const JWT_SECRET = process.env.JWT_SECRET
 
 export async function POST(request) {
   try {
     await dbConnect();
-
     const { email, password } = await request.json();
 
-    const user = await User.findOne({ email });
+    if (!email || !password) {
+      return NextResponse.json({ error: 'Email and password are required' }, { status: 400 });
+    }
+
+    // normalize email before lookup
+    const normalizedEmail = String(email).toLowerCase().trim();
+
+    const user = await User.findOne({ email: normalizedEmail });
+    console.log("user",user);
 
     if (!user) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
@@ -22,6 +29,11 @@ export async function POST(request) {
     // For this example, we are doing a plain text comparison.
     if (user.password !== password) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+    }
+
+    if (!JWT_SECRET) {
+      console.error('JWT_SECRET is not defined in environment')
+      return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
     }
 
     const token = jwt.sign({ userId: user._id, role: user.role }, JWT_SECRET, {
@@ -38,7 +50,6 @@ export async function POST(request) {
 
     const response = NextResponse.json({ message: 'Login successful' });
     response.headers.set('Set-Cookie', serializedCookie);
-    console.log("response",response);
 
     return response;
   } catch (error) {

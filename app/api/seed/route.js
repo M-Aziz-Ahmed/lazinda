@@ -10,9 +10,9 @@ export async function GET() {
 
     const users = [
       {
-        name: 'Admin User',
+        name: 'Aziz Ahmed',
         email: 'admin@example.com',
-        password: 'password123', // In a real app, this should be hashed
+        password: 'admin', // In a real app, this should be hashed
         role: 'admin',
         department: 'IT'
       },
