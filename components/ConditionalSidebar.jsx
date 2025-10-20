@@ -15,7 +15,6 @@ export default function ConditionalSidebar() {
   return (
     <>
       <AppSidebar />
-      <SidebarTrigger className={''}/>
     </>
   );
 }

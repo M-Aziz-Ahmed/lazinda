@@ -19,6 +19,7 @@ export async function POST(request) {
     const normalizedEmail = String(email).toLowerCase().trim();
 
     const user = await User.findOne({ email: normalizedEmail });
+
     console.log("user",user);
 
     if (!user) {
@@ -48,8 +49,19 @@ export async function POST(request) {
       path: '/',
     });
 
-    const response = NextResponse.json({ message: 'Login successful' });
+    const { password: _, ...userWithoutPassword } = user.toObject();
+
+    const response = NextResponse.json(
+      { message: 'Login successful', user: userWithoutPassword },
+      { status: 200 }
+    );
     response.headers.set('Set-Cookie', serializedCookie);
+
+    return response;
+
+
+    
+
 
     return response;
   } catch (error) {
