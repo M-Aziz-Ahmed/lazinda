@@ -21,11 +21,14 @@ export function CardDemo() {
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [verifying, setVerifying] = useState(false);
   const router = useRouter();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
       const res = await fetch("/api/auth/login", {
@@ -42,18 +45,22 @@ export function CardDemo() {
         setOtpSent(true);
         // If previewUrl returned (ethereal), show it in console for dev
         if (data.previewUrl) console.info('OTP preview:', data.previewUrl);
+        setLoading(false);
       } else {
         const data = await res.json();
         setError(data.error || "An error occurred.");
+        setLoading(false);
       }
     } catch (error) {
       setError("An error occurred. Please try again.");
+      setLoading(false);
     }
   };
 
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
     setError("");
+    setVerifying(true);
     try {
       const res = await fetch('/api/auth/verify-otp', {
         method: 'POST',
@@ -62,12 +69,15 @@ export function CardDemo() {
       });
       if (res.ok) {
         router.push('/');
+        setVerifying(false);
       } else {
         const data = await res.json();
         setError(data.error || 'OTP verification failed');
+        setVerifying(false);
       }
     } catch (err) {
       setError('OTP verification failed');
+      setVerifying(false);
     }
   };
 
@@ -126,8 +136,8 @@ export function CardDemo() {
           </div>
         </CardContent>
         <CardFooter className="flex-col gap-3 px-6 pb-6">
-          <Button type="submit" className="w-full py-2">
-            Login
+          <Button type="submit" className="w-full py-2" loading={otpSent ? verifying : loading}>
+            {otpSent ? (verifying ? 'Verifying...' : 'Verify OTP') : (loading ? 'Sending...' : 'Login')}
           </Button>
         </CardFooter>
       </form>
