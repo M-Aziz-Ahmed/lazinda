@@ -2,7 +2,6 @@
 import * as React from "react"
 import { Calendar, Home, Inbox, Search, Settings, ClipboardList, User } from "lucide-react"
 import { useIsMobile } from "@/hooks/use-mobile"
-import { cookies } from 'next/headers'
 
 import {
   Sidebar,
@@ -16,7 +15,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarTrigger,
-  useSidebar,
 } from "@/components/ui/sidebar"
  
 // Menu items.
@@ -50,9 +48,6 @@ const items = [
  
 export function AppSidebar() {
   const isMobile = useIsMobile()
- 
-
-  
 
   return (
     <>
@@ -89,10 +84,10 @@ export function AppSidebar() {
       )}
 
       {/* Make the sidebar collapsible into an icon rail on desktop */}
-      <Sidebar collapsible={"icon"} variant="floating" >
-      <SidebarHeader >
+      <Sidebar collapsible={"icon"} variant="floating">
+      <SidebarHeader>
         <div className="flex justify-end">
-          <SidebarTrigger />
+           <SidebarTrigger />
         </div>
        
         </SidebarHeader>

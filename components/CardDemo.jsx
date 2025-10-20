@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useAuth } from "@/app/context/AuthContext";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -18,7 +18,7 @@ export function CardDemo() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { login } = useAuth();
+  const router = useRouter();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -33,10 +33,10 @@ export function CardDemo() {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await res.json();
       if (res.ok) {
-        login(data.user);
+        router.push("/");
       } else {
+        const data = await res.json();
         setError(data.error || "An error occurred.");
       }
     } catch (error) {
