@@ -18,7 +18,10 @@ import {
   SidebarMenuItem,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+import { useSession } from "next-auth/react";
  
+
+
 // Menu items.
 const items = [
   {
@@ -49,7 +52,8 @@ const items = [
 ]
  
 export function AppSidebar() {
-  const name = getCookieClient('name');
+  const { data: session } = useSession();
+  console.log(session);
   const isMobile = useIsMobile()
 
   return (
@@ -127,7 +131,7 @@ export function AppSidebar() {
                   <SidebarMenuButton asChild>
                     <a href="/profile" className="flex items-center">
                       <User className="bg-slate-100" />
-                      <span className="border-l-2 border-slate-300 px-3 text-gray-600">{name}</span>
+                      <span className="border-l-2 border-slate-300 px-3 text-gray-600">{session?.user?.name}</span>
 
                     </a>
                   </SidebarMenuButton>

@@ -1,57 +1,45 @@
 import { NextResponse } from 'next/server';
-import { jwtVerify } from 'jose';
+import { getToken } from 'next-auth/jwt';
 
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
+const secret = process.env.JWT_SECRET;
 
 export async function middleware(request) {
   const { pathname } = request.nextUrl;
-  const tokenCookie = request.cookies.get('token');
-  const token = tokenCookie?.value;
 
-  // Public paths that don't require authentication
+  const token = await getToken({ req: request, secret });
+
   const publicPaths = ['/login'];
+  const adminPaths = ['/update-user']; // Routes that require admin role
 
-  // If the path is public, let the request through
-  if (publicPaths.includes(pathname)) {
-    // If user is logged in and tries to access login page, redirect to home
-    if (token) {
-      try {
-        await jwtVerify(token, JWT_SECRET);
-        return NextResponse.redirect(new URL('/', request.url));
-      } catch (error) {
-        // If token is invalid, let them go to the login page
+  const isPublicPath = publicPaths.includes(pathname);
+  // Check if the current path starts with any of the admin paths
+  const isAdminPath = adminPaths.some(path => pathname.startsWith(path));
+
+  if (token) {
+    // If user is logged in and tries to access a public path, redirect to home
+    if (isPublicPath) {
+      return NextResponse.redirect(new URL('/', request.url));
+    }
+
+    // If the path requires admin access, check the user's role
+    if (isAdminPath) {
+      if (token.role !== 'admin') {
+        // Redirect non-admins away from admin pages
+        return NextResponse.redirect(new URL('/', request.url)); // Or to a "not authorized" page
       }
     }
-    return NextResponse.next();
+  } else {
+    // If user is not logged in and tries to access a protected path (non-public)
+    if (!isPublicPath) {
+      return NextResponse.redirect(new URL('/login', request.url));
+    }
   }
 
-  // If there's no token and the path is not public, redirect to login
-  if (!token) {
-    return NextResponse.redirect(new URL('/login', request.url));
-  }
-
-  // Verify the token for protected routes
-  try {
-    await jwtVerify(token, JWT_SECRET);
-    // If token is valid, let the request proceed
-    return NextResponse.next();
-  } catch (error) {
-    // If token is invalid, redirect to login and clear the cookie
-    const response = NextResponse.redirect(new URL('/login', request.url));
-    response.cookies.set('token', '', { maxAge: 0 });
-    return response;
-  }
+  return NextResponse.next();
 }
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
     '/((?!api|_next/static|_next/image|favicon.ico).*)',
   ],
 };

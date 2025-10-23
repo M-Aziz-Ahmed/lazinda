@@ -18,8 +18,8 @@ export async function GET() {
       },
       {
         name: 'John Doe',
-        email: 'john.doe@example.com',
-        password: 'password123',
+        email: 'abdul6282@gmail.com',
+        password: 'admin',
         role: 'employee',
         department: 'Sales'
       },

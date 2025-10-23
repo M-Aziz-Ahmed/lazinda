@@ -1,12 +1,8 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/connectDb';
 import User from '@/lib/models/User';
-import jwt from 'jsonwebtoken';
-import { serialize } from 'cookie';
-import crypto from 'crypto';
 import { sendOtpEmail } from '@/lib/mail';
 
-const JWT_SECRET = process.env.JWT_SECRET
 
 export async function POST(request) {
   try {
@@ -21,7 +17,7 @@ export async function POST(request) {
     const normalizedEmail = String(email).toLowerCase().trim();
 
     const user = await User.findOne({ email: normalizedEmail });
-    console.log("user",user);
+    
 
     if (!user) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });

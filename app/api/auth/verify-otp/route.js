@@ -42,31 +42,7 @@ export async function POST(request) {
     user.otpExpires = null;
     await user.save();
 
-    const serializedCookie = serialize('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 60 * 60,
-      path: '/',
-    });
-
-    const serializedRoleCookie = serialize('role', String(user.role || ''), {
-      httpOnly: false,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      path: '/',
-    });
-    const serializedNameCookie = serialize('name', String(user.name || ''), {
-      httpOnly: false,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      path: '/',
-    });
-
     const response = NextResponse.json({ message: 'Authenticated' });
-    response.headers.append('Set-Cookie', serializedCookie);
-    response.headers.append('Set-Cookie', serializedRoleCookie);
-    response.headers.append('Set-Cookie', serializedNameCookie);
     return response;
   } catch (err) {
     console.error(err);

@@ -3,8 +3,11 @@ import { useState } from 'react';
 import { getCookieClient } from '@/lib/cookieUtils';
 import { Check } from 'lucide-react';
 import Link  from 'next/link';
+import { useSession } from 'next-auth/react';
+
 import { Button } from '@/components/ui/button';
-const name = getCookieClient('name');
+
+
 
 function AppCard({ id, name, description, icon, selected, onSelect, link }) {
   return (
@@ -30,7 +33,9 @@ function AppCard({ id, name, description, icon, selected, onSelect, link }) {
 }
 
 export default function Home() {
-  const role = getCookieClient('role');
+  const {data: session} = useSession();
+  const role = session?.user?.role;
+  const name = session?.user?.name;
   const [selected, setSelected] = useState('');
 
   const apps = [

@@ -14,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import OtpInput from "@/components/ui/otp-input";
 import { Label } from "@/components/ui/label";
+import { signIn } from "next-auth/react";
 
 export function CardDemo() {
   const [email, setEmail] = useState("");
@@ -40,46 +41,45 @@ export function CardDemo() {
       });
 
       const data = await res.json();
+
       if (res.ok) {
-        // OTP sent
         setOtpSent(true);
-        // If previewUrl returned (ethereal), show it in console for dev
-        if (data.previewUrl) console.info('OTP preview:', data.previewUrl);
-        setLoading(false);
+        if (data.previewUrl) console.info("OTP preview:", data.previewUrl);
       } else {
-        const data = await res.json();
         setError(data.error || "An error occurred.");
-        setLoading(false);
       }
     } catch (error) {
       setError("An error occurred. Please try again.");
+    } finally {
       setLoading(false);
     }
   };
 
   const handleVerifyOtp = async (e) => {
-    e.preventDefault();
-    setError("");
-    setVerifying(true);
-    try {
-      const res = await fetch('/api/auth/verify-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, otp }),
-      });
-      if (res.ok) {
-        router.push('/');
-        setVerifying(false);
-      } else {
-        const data = await res.json();
-        setError(data.error || 'OTP verification failed');
-        setVerifying(false);
-      }
-    } catch (err) {
-      setError('OTP verification failed');
-      setVerifying(false);
+  e.preventDefault();
+  setError("");
+  setVerifying(true);
+
+  try {
+    const res = await signIn("credentials", {
+      redirect: false, // prevent page reload
+      email,
+      otp,
+    });
+
+    if (res.ok) {
+      router.push("/"); // redirect to home after login
+    } else {
+      setError(res.error || "Invalid OTP. Please try again.");
     }
-  };
+  } catch (err) {
+    console.error(err);
+    setError("OTP verification failed.");
+  } finally {
+    setVerifying(false);
+  }
+};
+
 
   return (
     <Card className="w-full bg-white shadow-sm">
